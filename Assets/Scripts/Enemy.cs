@@ -8,18 +8,20 @@ public class Enemy : MonoBehaviour
 {
     [SerializeField] private float _moveSpeed = 5f;
 
+    private Target _target;
     private bool _isMoving;
 
     public event Action<Enemy> Death;
+    public event Action<Enemy> TargetCatched;
 
     public void SetStartPosition(Vector3 position)
     {
         transform.position = position;
     }
 
-    public void SetStartRotation(Quaternion rotation)
+    public void SetTarget(Target target)
     {
-        transform.rotation = rotation;
+        _target = target;
     }
     
     private void OnEnable()
@@ -37,13 +39,20 @@ public class Enemy : MonoBehaviour
 
             Death?.Invoke(this);
         }
+        else if (collision.gameObject.TryGetComponent(out Target target) && target == _target)
+        {
+            _isMoving = false;
+            
+            TargetCatched?.Invoke(this);
+        }
     }
 
     private IEnumerator MoveLoop()
     {
         while (_isMoving)
         {
-            transform.Translate(Vector3.forward * _moveSpeed * Time.deltaTime);
+            Vector3 direction = _target.GetPosition();
+            transform.Translate(direction * _moveSpeed * Time.deltaTime);
 
             yield return null;
         }
