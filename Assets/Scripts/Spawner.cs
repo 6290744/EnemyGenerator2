@@ -1,20 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
-using Random = UnityEngine.Random;
 
 public class EnemySpawner : MonoBehaviour
 {
-    [SerializeField] private List<SpawnPoint> _spawnPoints;
+    [SerializeField] private SpawnPoint _spawnPoint;
+    [SerializeField] private Target _target;
     [SerializeField] private Enemy _enemyPrefab;
-    [SerializeField] private float _spawnInterval;
     [SerializeField] private int _enemyMaximalCount;
     [SerializeField] private int _enemyCapacity;
 
     private ObjectPool<Enemy> _poolOfEnemies;
     private bool isSpawning;
 
+    public void SpawnEnemy()
+    {
+        _poolOfEnemies.Get();
+    }
+    
     private void Awake()
     {
         _poolOfEnemies = new ObjectPool<Enemy>(
@@ -28,58 +30,31 @@ public class EnemySpawner : MonoBehaviour
         );
     }
 
-    private void Start()
-    {
-        StartCoroutine(SpawnLoop(true));
-    }
-
     private void OnGetFromPool(Enemy enemy)
     {
         enemy.SetStartPosition(GetStartPosition());
-        enemy.SetStartRotation(GetStartRotation());
+        enemy.SetTarget(_target);
         enemy.gameObject.SetActive(true);
 
-        enemy.Death += OnEnemyDeath;
+        enemy.Death += DisactivateEnemy;
+        enemy.TargetCatched += DisactivateEnemy;
     }
 
     private void OnReleaseToPool(Enemy enemy)
     {
         enemy.gameObject.SetActive(false);
 
-        enemy.Death -= OnEnemyDeath;
+        enemy.Death -= DisactivateEnemy;
+        enemy.TargetCatched -= DisactivateEnemy;
     }
-
-    private void OnEnemyDeath(Enemy enemy)
-    {
-        _poolOfEnemies.Release(enemy);
-    }
-
+    
     private Vector3 GetStartPosition()
     {
-        int choosedSpawnPointIndex = Random.Range(0, _spawnPoints.Count);
-
-        return _spawnPoints[choosedSpawnPointIndex].GetSpawnPosition();
+        return _spawnPoint.GetPosition();
     }
 
-    private Quaternion GetStartRotation()
+    private void DisactivateEnemy(Enemy enemy)
     {
-        int rotationX = 0;
-        int rotationZ = 0;
-        int rotationY = Random.Range(0, 360);
-        
-        return Quaternion.Euler(rotationX, rotationY, rotationZ);;
-    }
-
-    private IEnumerator SpawnLoop(bool isSpawning)
-    {
-         while (isSpawning)
-         {
-             if (_poolOfEnemies.CountActive < _enemyMaximalCount)
-             {
-                 _poolOfEnemies.Get();
-             }
-        
-             yield return new WaitForSeconds(_spawnInterval);
-         }
+        _poolOfEnemies.Release(enemy);
     }
 }
