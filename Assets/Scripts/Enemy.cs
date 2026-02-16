@@ -31,6 +31,11 @@ public class Enemy : MonoBehaviour
         StartCoroutine(MoveLoop());
     }
 
+    private void OnDisable()
+    {
+        _isMoving = false;
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.TryGetComponent<Wall>(out _))
@@ -51,9 +56,16 @@ public class Enemy : MonoBehaviour
     {
         while (_isMoving)
         {
-            Vector3 direction = _target.GetPosition();
-            transform.Translate(direction * _moveSpeed * Time.deltaTime);
-
+            if (_target != null)
+            {
+                Vector3 direction = _target.GetPosition();
+            
+                transform.position = Vector3.MoveTowards(transform.position, direction, _moveSpeed * Time.deltaTime);
+            }
+            
+            //узнать, как работает метод MoveTowards и почему не += а =
+            // развернуть врага к цели
+            
             yield return null;
         }
     }

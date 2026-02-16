@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 5654088367818934113}
   - component: {fileID: 2886722180954432941}
   - component: {fileID: 358791643456620774}
-  - component: {fileID: 8318626558465701784}
   - component: {fileID: -7606810701168710610}
+  - component: {fileID: 936415894042952729}
   m_Layer: 0
   m_Name: EnemyHorse
   m_TagString: Untagged
@@ -67,7 +67,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f6730b960ba6c914e9141395fc93249f, type: 2}
+  - {fileID: 2100000, guid: fa92ab544d2bf43c9bbfca678c07f348, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -116,8 +116,21 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 80
   m_CollisionDetection: 0
---- !u!136 &8318626558465701784
-CapsuleCollider:
+--- !u!114 &-7606810701168710610
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6098572135879396570}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3c124d2b9c22429a8353cdfbbe26baa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _moveSpeed: 5
+--- !u!65 &936415894042952729
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -134,21 +147,6 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.6
-  m_Height: 3
-  m_Direction: 2
-  m_Center: {x: 0, y: 0.66, z: 0}
---- !u!114 &-7606810701168710610
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6098572135879396570}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c3c124d2b9c22429a8353cdfbbe26baa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _moveSpeed: 5
+  serializedVersion: 3
+  m_Size: {x: 0.54998267, y: 1.8560486, z: 2.658414}
+  m_Center: {x: -0.000000059604645, y: 0.92764604, z: 0.16339505}
