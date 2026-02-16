@@ -32,7 +32,7 @@ public class EnemySpawner : MonoBehaviour
 
     private void OnGetFromPool(Enemy enemy)
     {
-        enemy.SetStartPosition(GetStartPosition());
+        enemy.SetStartPosition(GetStartPointPosition());
         enemy.SetTarget(_target);
         enemy.gameObject.SetActive(true);
 
@@ -48,7 +48,7 @@ public class EnemySpawner : MonoBehaviour
         enemy.TargetCatched -= DisactivateEnemy;
     }
     
-    private Vector3 GetStartPosition()
+    private Vector3 GetStartPointPosition()
     {
         return _spawnPoint.GetPosition();
     }
