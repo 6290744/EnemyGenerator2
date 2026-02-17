@@ -11,6 +11,7 @@ public class SpawnInvoker : MonoBehaviour
     private void Start()
     {
         _isSpawning = true;
+        
         StartCoroutine(Spawnloop());
     }
 
