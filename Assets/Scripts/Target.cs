@@ -3,15 +3,18 @@ using UnityEngine;
 
 public class Target : MonoBehaviour
 {
+    [SerializeField] private GameObject _centerOfRotation;
+    [SerializeField] private float _rotationSpeed = 10;
+
     private bool _isMooving;
-    private float _maximalMooving = 2f;
 
     private void OnEnable()
     {
-        //_isMooving = true;
+        _isMooving = true;
+
         StartCoroutine(Moveloop());
     }
-    
+
     public Vector3 GetPosition()
     {
         return transform.position;
@@ -21,8 +24,8 @@ public class Target : MonoBehaviour
     {
         while (_isMooving)
         {
-            //не работает движение
-            transform.position = Vector3.MoveTowards(transform.right * _maximalMooving, transform.right * _maximalMooving * -1, Time.deltaTime);
+            transform.RotateAround(_centerOfRotation.transform.position, Vector3.up, _rotationSpeed * Time.deltaTime);
+
             yield return new WaitForEndOfFrame();
         }
     }
