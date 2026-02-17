@@ -3,7 +3,6 @@ using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody), typeof(Collider))]
-
 public class Enemy : MonoBehaviour
 {
     [SerializeField] private float _moveSpeed = 5f;
@@ -19,13 +18,15 @@ public class Enemy : MonoBehaviour
         transform.position = position;
     }
 
-    public void SetTarget(Target target)
+    public void Attack(Target target)
     {
+        if (target is null)
+        {
+            return;
+        }
+
         _target = target;
-    }
-    
-    private void OnEnable()
-    {
+
         _isMoving = true;
 
         StartCoroutine(MoveLoop());
@@ -47,7 +48,7 @@ public class Enemy : MonoBehaviour
         else if (collision.gameObject.TryGetComponent(out Target target) && target == _target)
         {
             _isMoving = false;
-            
+
             TargetCatched?.Invoke(this);
         }
     }
@@ -56,17 +57,21 @@ public class Enemy : MonoBehaviour
     {
         while (_isMoving)
         {
-            if (_target != null)
-            {
-                Vector3 direction = _target.GetPosition();
-            
-                transform.position = Vector3.MoveTowards(transform.position, direction, _moveSpeed * Time.deltaTime);
-            }
-            
-            //узнать, как работает метод MoveTowards и почему не += а =
-            // развернуть врага к цели
+            RotateTo(_target);
+
+            MoveTo( _target.GetPosition());
             
             yield return null;
         }
+    }
+
+    private void RotateTo(Target target)
+    {
+        transform.rotation = Quaternion.LookRotation(target.GetPosition() - transform.position);
+    }
+
+    private void MoveTo(Vector3 targetPosition)
+    {
+        transform.position = Vector3.MoveTowards(transform.position, targetPosition, _moveSpeed * Time.deltaTime);
     }
 }
