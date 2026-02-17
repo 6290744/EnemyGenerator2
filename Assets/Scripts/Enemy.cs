@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody), typeof(Collider))]
+
 public class Enemy : MonoBehaviour
 {
     [SerializeField] private float _moveSpeed = 5f;
@@ -59,7 +60,7 @@ public class Enemy : MonoBehaviour
         {
             RotateTo(_target);
 
-            MoveTo( _target.GetPosition());
+            MoveTo(_target.GetPosition());
             
             yield return null;
         }

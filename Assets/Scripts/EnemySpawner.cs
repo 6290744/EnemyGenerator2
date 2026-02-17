@@ -9,8 +9,8 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private int _enemyMaximalCount;
     [SerializeField] private int _enemyCapacity;
 
-    private ObjectPool<Enemy> _poolOfEnemies;
     private bool isSpawning;
+    private ObjectPool<Enemy> _poolOfEnemies;
 
     public void SpawnEnemy()
     {
@@ -32,28 +32,28 @@ public class EnemySpawner : MonoBehaviour
 
     private void OnGetFromPool(Enemy enemy)
     {
-        enemy.SetStartPosition(GetStartPointPosition());
-        enemy.SetTarget(_target);
+        enemy.SetStartPosition(GetSpawnPointPosition());
         enemy.gameObject.SetActive(true);
+        enemy.Attack(_target);
 
-        enemy.Death += DisactivateEnemy;
-        enemy.TargetCatched += DisactivateEnemy;
+        enemy.Death += DeactivateEnemy;
+        enemy.TargetCatched += DeactivateEnemy;
     }
 
     private void OnReleaseToPool(Enemy enemy)
     {
         enemy.gameObject.SetActive(false);
 
-        enemy.Death -= DisactivateEnemy;
-        enemy.TargetCatched -= DisactivateEnemy;
+        enemy.Death -= DeactivateEnemy;
+        enemy.TargetCatched -= DeactivateEnemy;
     }
     
-    private Vector3 GetStartPointPosition()
+    private Vector3 GetSpawnPointPosition()
     {
         return _spawnPoint.GetPosition();
     }
 
-    private void DisactivateEnemy(Enemy enemy)
+    private void DeactivateEnemy(Enemy enemy)
     {
         _poolOfEnemies.Release(enemy);
     }
