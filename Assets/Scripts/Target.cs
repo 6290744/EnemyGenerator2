@@ -22,11 +22,13 @@ public class Target : MonoBehaviour
 
     private IEnumerator Moveloop()
     {
+        WaitForEndOfFrame waitForEndOfFrame = new WaitForEndOfFrame();
+        
         while (_isMooving)
         {
             transform.RotateAround(_centerOfRotation.transform.position, Vector3.up, _rotationSpeed * Time.deltaTime);
 
-            yield return new WaitForEndOfFrame();
+            yield return waitForEndOfFrame;
         }
     }
 }

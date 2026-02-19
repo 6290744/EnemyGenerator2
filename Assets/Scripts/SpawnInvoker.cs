@@ -17,9 +17,11 @@ public class SpawnInvoker : MonoBehaviour
 
     private IEnumerator Spawnloop()
     {
+        WaitForSeconds waitForSeconds = new WaitForSeconds(_spawnLatency);
+        
         while (_isSpawning)
         {
-            yield return new WaitForSeconds(_spawnLatency);
+            yield return waitForSeconds;
             
             GetRandomSpawner().SpawnEnemy();
         }
