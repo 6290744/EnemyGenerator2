@@ -11,11 +11,6 @@ public class EnemySpawner : MonoBehaviour
 
     private bool isSpawning;
     private ObjectPool<Enemy> _poolOfEnemies;
-
-    public void SpawnEnemy()
-    {
-        _poolOfEnemies.Get();
-    }
     
     private void Awake()
     {
@@ -29,15 +24,20 @@ public class EnemySpawner : MonoBehaviour
             maxSize: _enemyMaximalCount
         );
     }
+    
+    public void SpawnEnemy()
+    {
+        _poolOfEnemies.Get();
+    }
 
     private void OnGetFromPool(Enemy enemy)
     {
         enemy.SetStartPosition(GetSpawnPointPosition());
         enemy.gameObject.SetActive(true);
-        enemy.Attack(_target);
+        enemy.Chase(_target);
 
         enemy.Death += DeactivateEnemy;
-        enemy.TargetCatched += DeactivateEnemy;
+        enemy.TargetChased += DeactivateEnemy;
     }
 
     private void OnReleaseToPool(Enemy enemy)
@@ -45,7 +45,7 @@ public class EnemySpawner : MonoBehaviour
         enemy.gameObject.SetActive(false);
 
         enemy.Death -= DeactivateEnemy;
-        enemy.TargetCatched -= DeactivateEnemy;
+        enemy.TargetChased -= DeactivateEnemy;
     }
     
     private Vector3 GetSpawnPointPosition()
