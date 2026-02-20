@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8658762973131420972}
   - component: {fileID: 3343802189358573601}
   - component: {fileID: 6322700566341354916}
+  - component: {fileID: 8391585507193531560}
   m_Layer: 0
   m_Name: TargetPoints
   m_TagString: Untagged
@@ -123,5 +124,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8166472f0b4148a1b5a744e8e56c074, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _centerOfRotation: {fileID: 0}
-  _rotationSpeed: 10
+  _wayPoints: []
+  _moveSpeed: 3
+  _minimalDistanceForChangeWaypoint: 0.05
+--- !u!114 &8391585507193531560
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5180396102317480639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ebadc868c8ced4ed190ecedcfa6001e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
