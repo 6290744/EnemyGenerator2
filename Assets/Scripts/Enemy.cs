@@ -3,7 +3,6 @@ using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody), typeof(Collider))]
-
 public class Enemy : MonoBehaviour
 {
     [SerializeField] private float _moveSpeed = 5f;
@@ -12,32 +11,13 @@ public class Enemy : MonoBehaviour
     private bool _isMoving;
 
     public event Action<Enemy> Death;
-    public event Action<Enemy> TargetCatched;
-
-    public void SetStartPosition(Vector3 position)
-    {
-        transform.position = position;
-    }
-
-    public void Attack(Target target)
-    {
-        if (target is null)
-        {
-            return;
-        }
-
-        _target = target;
-
-        _isMoving = true;
-
-        StartCoroutine(MoveLoop());
-    }
+    public event Action<Enemy> TargetChased;
 
     private void OnDisable()
     {
         _isMoving = false;
     }
-
+    
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.TryGetComponent<Wall>(out _))
@@ -50,29 +30,50 @@ public class Enemy : MonoBehaviour
         {
             _isMoving = false;
 
-            TargetCatched?.Invoke(this);
+            TargetChased?.Invoke(this);
         }
     }
+    
+    public void SetStartPosition(Vector3 position)
+    {
+        transform.position = position;
+    }
 
+    public void Chase(Target target)
+    {
+        if (target is null)
+        {
+            return;
+        }
+
+        _target = target;
+
+        _isMoving = true;
+
+        StartCoroutine(MoveLoop());
+    }
+    
     private IEnumerator MoveLoop()
     {
+        WaitForEndOfFrame waitForEndOfFrame = new WaitForEndOfFrame();
+        
         while (_isMoving)
         {
             RotateTo(_target);
 
-            MoveTo(_target.GetPosition());
+            MoveTo(_target);
             
-            yield return null;
+            yield return waitForEndOfFrame;
         }
     }
 
     private void RotateTo(Target target)
     {
-        transform.rotation = Quaternion.LookRotation(target.GetPosition() - transform.position);
+        transform.rotation = Quaternion.LookRotation(target.Position - transform.position);
     }
 
-    private void MoveTo(Vector3 targetPosition)
+    private void MoveTo(Target target)
     {
-        transform.position = Vector3.MoveTowards(transform.position, targetPosition, _moveSpeed * Time.deltaTime);
+        transform.position = Vector3.MoveTowards(transform.position, target.Position, _moveSpeed * Time.deltaTime);
     }
 }
